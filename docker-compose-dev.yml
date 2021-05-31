@@ -1,0 +1,10 @@
+version: '3.8'
+
+services:
+  auth-svc:
+    container_name: auth-svc
+    build: https://github.com/netguru/nodejs-recruitment-task.git
+    ports:
+      - 3000
+    environment:
+      JWT_SECRET: secret

@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  app:
+    container_name: movies-svc
+    build:
+      context: .
+      target: movies-svc
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules # prevents node_modules/ in the container from being overridden
+    working_dir: /usr/src/app
+    command: ./node_modules/.bin/jest --config ./test/jest-e2e.json
+    environment:
+      NODE_ENV: test
+    networks:
+      - testnet
+    depends_on:
+      - auth-svc
+      - postgres
+
+  auth-svc:
+    container_name: auth-svc
+    build: https://github.com/netguru/nodejs-recruitment-task.git
+    networks:
+      - testnet
+    environment:
+      JWT_SECRET: secret
+
+  postgres:
+    container_name: postgres
+    image: postgres:12
+    networks:
+      - testnet
+    environment:
+      POSTGRES_DB: movies-svc
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      PG_DATA: /var/lib/postgresql/data
+
+networks:
+  testnet:
