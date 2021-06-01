@@ -22,7 +22,7 @@ jobs:
       - run: npm run test
   tests-e2e:
     timeout-minutes: 10
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-18.04
 
     steps:
       - uses: actions/checkout@v2
