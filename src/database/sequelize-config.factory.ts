@@ -15,16 +15,15 @@ export function SequelizeConfigFactory(config: ConfigService): SequelizeModuleOp
     password: config.get('DB_PASSWORD'),
     storage: config.get('DB_STORAGE'),
     database: config.get('DB_NAME'),
+    autoLoadModels: true,
+    synchronize: true,
+    logging: false,
   };
 
-  // Synchronize relations when in dev mode
-  dbConfig.autoLoadModels = true;
-  dbConfig.synchronize = process.env.NODE_ENV !== 'production';
-
-  // Also add logging
-  if (dbConfig.synchronize) {
+  // Add logging
+  if (process.env.NODE_ENV !== 'production') {
     const logger = new Logger('Database');
-    dbConfig.logging = (msg: any) => logger.log(msg);
+    dbConfig.logging = (msg: any) => logger.debug(msg);
   }
 
   return dbConfig;

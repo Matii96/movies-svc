@@ -1,0 +1,49 @@
+version: '3.8'
+
+services:
+  app:
+    container_name: movies-svc
+    build:
+      context: .
+      target: movies-svc
+    environment:
+      NODE_ENV: production
+      DB_DIALECT: postgres
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_USERNAME: postgres
+      DB_PASSWORD: postgres
+      DB_NAME: movies-svc
+      PORT: ${APP_PORT:-3100}
+    ports:
+      - published: ${APP_PORT:-3100}
+        target: 3100
+    networks:
+      - testnet
+    depends_on:
+      - auth-svc
+      - postgres
+
+  auth-svc:
+    container_name: auth-svc
+    build: https://github.com/netguru/nodejs-recruitment-task.git
+    networks:
+      - testnet
+    environment:
+      JWT_SECRET: secret
+
+  postgres:
+    container_name: postgres
+    image: postgres:12
+    networks:
+      - testnet
+    volumes:
+      - ${PG_DATA}:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: movies-svc
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      PG_DATA: /var/lib/postgresql/data
+
+networks:
+  testnet:
