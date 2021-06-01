@@ -51,15 +51,12 @@ describe('MoviesService', () => {
   });
 
   it('should create movie', async () => {
-    // mapMovieMock(service);
+    mapMovieMock(service);
     expect(await service.create(jwtUserMock(), movieInputMock())).toEqual(movieOutputMock());
   });
 
   it('should get list movies', async () => {
-    // mapMovieMock(service);
-
-    console.log(await service.list(jwtUserMock().userId), movieOutputMock());
-
+    mapMovieMock(service);
     expect(await service.list(jwtUserMock().userId)).toEqual([movieOutputMock()]);
   });
 });

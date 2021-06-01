@@ -1,4 +1,5 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, HttpService } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { InjectModel } from '@nestjs/sequelize';
 import { IRequestJwtData } from 'src/authentication/interfaces/request-jwt-data.interface';
 import { DatabaseService } from 'src/database/database.service';
@@ -9,6 +10,8 @@ import { Movie } from './entities/movie.entity';
 @Injectable()
 export class MoviesService {
   constructor(
+    private readonly config: ConfigService,
+    private readonly httpService: HttpService,
     @InjectModel(Movie) private readonly movieModel: typeof Movie,
     private readonly databaseService: DatabaseService,
   ) {}
@@ -29,6 +32,17 @@ export class MoviesService {
    * @returns {Promise<MovieOutput>}
    */
   async create(user: IRequestJwtData, data: MovieInput) {
+    const omdbData = await this.httpService
+      .get('http://www.omdbapi.com', {
+        params: {
+          apikey: this.config.get<string>('MOVIES_BASIC_LIMIT'),
+          t: data.title,
+        },
+      })
+      .toPromise();
+
+    console.log(omdbData);
+
     return this.movieModel
       .create({ userId: user.userId, ...data })
       .then(this.mapMovie)
@@ -42,8 +56,5 @@ export class MoviesService {
    */
   async list(userId: number) {
     return this.movieModel.findAll({ where: { userId } }).then((movies) => movies.map(this.mapMovie));
-    // const movies = await this.movieModel.findAll({ where: { userId } }).then((movies) => movies.map(this.mapMovie));
-    // console.log(movies);
-    // return movies;
   }
 }

@@ -6,7 +6,7 @@ import { jwtUserMock } from 'src/authentication/authentication.fixtures';
 import { MovieInput } from './dto/movie.input';
 import { MoviesController } from './movies.controller';
 import { MoviesService } from './movies.service';
-import { movieEntityMock, movieInputMock, movieOutputMock } from './movies.fixtures';
+import { movieInputMock, movieOutputMock } from './movies.fixtures';
 import { Movie } from './entities/movie.entity';
 import { ConfigModule } from '@nestjs/config';
 
@@ -22,8 +22,8 @@ describe('MoviesController', () => {
         {
           provide: MoviesService,
           useValue: {
-            create: jest.fn((user: IRequestJwtData, data: MovieInput) => movieEntityMock()),
-            list: jest.fn((userId: number) => [movieEntityMock()]),
+            create: jest.fn((user: IRequestJwtData, data: MovieInput) => movieOutputMock()),
+            list: jest.fn((userId: number) => [movieOutputMock()]),
           },
         },
         {
