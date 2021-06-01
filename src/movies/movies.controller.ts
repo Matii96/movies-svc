@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
 import { ApiBody, ApiCreatedResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
-import { RestRequestUser } from 'src/authentication/decorators/gql-user.decorator';
+import { RestRequestUser } from 'src/authentication/decorators/rest-user.decorator';
 import { IRequestJwtData } from 'src/authentication/interfaces/request-jwt-data.interface';
 import { JwtAuthGuard } from 'src/authentication/guards/jwt-auth.guard';
 import { MoviesLimitGuard } from './guards/movies-limit.guard';

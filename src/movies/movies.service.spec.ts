@@ -1,10 +1,14 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { HttpService } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
 import { getModelToken } from '@nestjs/sequelize';
+import { AxiosResponse } from 'axios';
+import { of } from 'rxjs';
 import { DatabaseService } from 'src/database/database.service';
 import { jwtUserMock } from 'src/authentication/authentication.fixtures';
 import { MoviesService } from './movies.service';
 import { Movie } from './entities/movie.entity';
-import { movieInputMock, movieOutputMock, movieEntityMock } from './movies.fixtures';
+import { movieInputMock, movieOutputMock, movieEntityMock, omdbDataMock } from './movies.fixtures';
 import { MovieOutput } from './dto/movie.output';
 
 const mapMovieMock = (service: MoviesService) =>
@@ -20,11 +24,17 @@ const mapMovieMock = (service: MoviesService) =>
 
 describe('MoviesService', () => {
   let service: MoviesService;
+  let httpServiceMock: HttpService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
+      imports: [ConfigModule.forRoot({ load: [() => ({})] })],
       providers: [
         MoviesService,
+        {
+          provide: HttpService,
+          useValue: { get: jest.fn(async () => undefined) },
+        },
         {
           provide: getModelToken(Movie),
           useValue: {
@@ -39,7 +49,8 @@ describe('MoviesService', () => {
       ],
     }).compile();
 
-    service = module.get<MoviesService>(MoviesService);
+    service = module.get(MoviesService);
+    httpServiceMock = module.get(HttpService);
   });
 
   it('should be defined', () => {
@@ -51,6 +62,15 @@ describe('MoviesService', () => {
   });
 
   it('should create movie', async () => {
+    const result: AxiosResponse = {
+      data: omdbDataMock(),
+      status: 200,
+      statusText: 'OK',
+      headers: {},
+      config: {},
+    };
+    jest.spyOn(httpServiceMock, 'get').mockImplementationOnce(() => of(result));
+
     mapMovieMock(service);
     expect(await service.create(jwtUserMock(), movieInputMock())).toEqual(movieOutputMock());
   });

@@ -1,4 +1,4 @@
-import { Injectable, HttpService } from '@nestjs/common';
+import { Injectable, HttpService, BadRequestException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectModel } from '@nestjs/sequelize';
 import { IRequestJwtData } from 'src/authentication/interfaces/request-jwt-data.interface';
@@ -6,6 +6,8 @@ import { DatabaseService } from 'src/database/database.service';
 import { MovieInput } from './dto/movie.input';
 import { MovieOutput } from './dto/movie.output';
 import { Movie } from './entities/movie.entity';
+import { IOmbdData } from './interfaces/omdb-data.interface';
+import { IOmbdError } from './interfaces/omdb-error.interface';
 
 @Injectable()
 export class MoviesService {
@@ -31,20 +33,27 @@ export class MoviesService {
    * @param {MovieInput} data
    * @returns {Promise<MovieOutput>}
    */
-  async create(user: IRequestJwtData, data: MovieInput) {
-    const omdbData = await this.httpService
-      .get('http://www.omdbapi.com', {
+  async create(user: IRequestJwtData, input: MovieInput) {
+    const { data } = await this.httpService
+      .get<IOmbdData | IOmbdError>(this.config.get<string>('OMDBAPI_URL'), {
         params: {
-          apikey: this.config.get<string>('MOVIES_BASIC_LIMIT'),
-          t: data.title,
+          apikey: this.config.get<string>('OMDBAPI_KEY'),
+          t: input.title,
         },
       })
       .toPromise();
-
-    console.log(omdbData);
+    if (data.Response === 'False') {
+      throw new BadRequestException(data.Error);
+    }
 
     return this.movieModel
-      .create({ userId: user.userId, ...data })
+      .create({
+        title: data.Title,
+        released: data.Released,
+        genre: data.Genre,
+        director: data.Director,
+        userId: user.userId,
+      })
       .then(this.mapMovie)
       .catch((err) => this.databaseService.handleDatabaseError(err));
   }
