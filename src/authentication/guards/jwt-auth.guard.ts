@@ -13,15 +13,15 @@ export class JwtAuthGuard {
    * @returns {boolean}
    */
   canActivate(context: ExecutionContext): boolean {
-    const req: IRequestJwt = context.switchToHttp().getRequest();
+    const req = context.switchToHttp().getRequest<IRequestJwt>();
     req.user = this.validateToken(req.headers.authorization);
     return true;
   }
 
   /**
    *
-   * @param {string} bearerToken
-   * @returns {LoginUserOutput}
+   * @param {string} bearerToken Example: Bearer jwt
+   * @returns {IRequestJwtData}
    */
   validateToken(bearerToken: string): IRequestJwtData {
     if (!bearerToken) {

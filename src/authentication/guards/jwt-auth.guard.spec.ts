@@ -2,13 +2,21 @@ import { ExecutionContext, UnauthorizedException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtAuthGuard } from './jwt-auth.guard';
+import { jwtUserMock } from '../authentication.fixtures';
 
 describe('JwtAuthGuard', () => {
   let guard: JwtAuthGuard;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [JwtModule.register({ secret: 'secret', verifyOptions: { clockTimestamp: 0 } })],
+      imports: [
+        JwtModule.register({
+          secret: 'secret',
+          verifyOptions: {
+            clockTimestamp: 1, // Hack making each expiring jwt to be valid
+          },
+        }),
+      ],
       providers: [JwtAuthGuard],
     }).compile();
 
@@ -20,7 +28,7 @@ describe('JwtAuthGuard', () => {
   });
 
   it('should allow access', () => {
-    jest.spyOn(guard, 'validateToken').mockImplementationOnce((authorization: string) => null);
+    jest.spyOn(guard, 'validateToken').mockImplementationOnce((authorization: string) => jwtUserMock());
     const context = <ExecutionContext>{
       switchToHttp: () => ({ getRequest: () => ({ headers: { authorization: 'test' } }) }),
     };

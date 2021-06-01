@@ -1,6 +1,7 @@
 import { NestFactory } from '@nestjs/core';
+import { Logger, ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { Logger } from '@nestjs/common';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { LoggerFactory } from './app.logger-factory';
 import { HttpExceptionFilter } from './http-exception.filter';
 import { AppModule } from './app.module';
@@ -11,6 +12,15 @@ async function bootstrap() {
 
   app.useLogger(LoggerFactory(config));
   app.useGlobalFilters(new HttpExceptionFilter());
+
+  const document = SwaggerModule.createDocument(
+    app,
+    new DocumentBuilder().setTitle('Movies api').setDescription('Movies microservice').setVersion('1.0').build(),
+  );
+  SwaggerModule.setup('docs', app, document);
+
+  // For class-validator
+  app.useGlobalPipes(new ValidationPipe({ transform: true }));
 
   // Start application
   const port = config.get<number>('PORT');
