@@ -13,6 +13,12 @@ services:
     command: ./node_modules/.bin/jest --config ./test/jest-e2e.json
     environment:
       NODE_ENV: test
+      DB_DIALECT: postgres
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_USERNAME: postgres
+      DB_PASSWORD: postgres
+      DB_NAME: movies-svc
     networks:
       - testnet
     depends_on:
