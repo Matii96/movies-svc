@@ -7,7 +7,8 @@ import { IOmbdData } from './interfaces/omdb-data.interface';
 export const movieInputMock = (): MovieInput => ({ title: 'Star wars' });
 
 export const movieOutputMock = (): MovieOutput => ({
-  title: 'Star wars',
+  id: 'd160fee1-3255-413c-b4de-acd3892c5533',
+  title: 'Star Wars: Episode IV - A New Hope',
   released: new Date('25 May 1977'),
   genre: 'Action, Adventure, Fantasy, Sci-Fi',
   director: 'George Lucas',
@@ -16,7 +17,6 @@ export const movieOutputMock = (): MovieOutput => ({
 
 export const movieEntityMock = () =>
   <Movie>{
-    id: 'd160fee1-3255-413c-b4de-acd3892c5533',
     ...movieOutputMock(),
     userId: jwtUserMock().userId,
     createdAt: new Date('10 June 2000'),

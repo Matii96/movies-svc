@@ -1,6 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
 
 export class MovieOutput {
+  @ApiProperty()
+  id: string;
+
   @ApiProperty({ example: 'Star wars' })
   title: string;
 

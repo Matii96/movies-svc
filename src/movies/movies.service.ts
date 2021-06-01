@@ -23,14 +23,15 @@ export class MoviesService {
    * @param {Movie} movie
    * @returns {MovieOutput}
    */
-  mapMovie({ title, released, genre, director, createdAt }: Movie): MovieOutput {
-    return { title, released, genre, director, createdAt };
+  mapMovie({ id, title, released, genre, director, createdAt }: Movie): MovieOutput {
+    return { id, title, released, genre, director, createdAt };
   }
 
   /**
    *
    * @param {number} userId
    * @param {MovieInput} data
+   * @throws {BadRequestException} when omdb api request failed
    * @returns {Promise<MovieOutput>}
    */
   async create(user: IRequestJwtData, input: MovieInput) {

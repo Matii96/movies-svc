@@ -13,11 +13,13 @@ async function bootstrap() {
   app.useLogger(LoggerFactory(config));
   app.useGlobalFilters(new HttpExceptionFilter());
 
-  const document = SwaggerModule.createDocument(
-    app,
-    new DocumentBuilder().setTitle('Movies api').setDescription('Movies microservice').setVersion('1.0').build(),
-  );
-  SwaggerModule.setup('docs', app, document);
+  if (process.env.NODE_ENV !== 'production') {
+    const document = SwaggerModule.createDocument(
+      app,
+      new DocumentBuilder().setTitle('Movies api').setDescription('Movies microservice').setVersion('1.0').build(),
+    );
+    SwaggerModule.setup('docs', app, document);
+  }
 
   // For class-validator
   app.useGlobalPipes(new ValidationPipe({ transform: true }));

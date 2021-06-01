@@ -13,7 +13,8 @@ import { MovieOutput } from './dto/movie.output';
 
 const mapMovieMock = (service: MoviesService) =>
   jest.spyOn(service, 'mapMovie').mockImplementationOnce(
-    ({ title, released, genre, director, createdAt }: Movie): MovieOutput => ({
+    ({ id, title, released, genre, director, createdAt }: Movie): MovieOutput => ({
+      id,
       title,
       released,
       genre,

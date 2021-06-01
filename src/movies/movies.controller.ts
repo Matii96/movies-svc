@@ -2,6 +2,7 @@ import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
 import { ApiBody, ApiCreatedResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { RestRequestUser } from 'src/authentication/decorators/rest-user.decorator';
 import { IRequestJwtData } from 'src/authentication/interfaces/request-jwt-data.interface';
+import { RestUserHeader } from 'src/authentication/decorators/rest-user-header.decorator';
 import { JwtAuthGuard } from 'src/authentication/guards/jwt-auth.guard';
 import { MoviesLimitGuard } from './guards/movies-limit.guard';
 import { MovieInput } from './dto/movie.input';
@@ -10,6 +11,7 @@ import { MoviesService } from './movies.service';
 
 @ApiTags('Movies')
 @UseGuards(JwtAuthGuard)
+@RestUserHeader()
 @Controller('movies')
 export class MoviesController {
   constructor(private readonly moviesService: MoviesService) {}

@@ -1,4 +1,4 @@
-import { BadRequestException, ExecutionContext, Injectable } from '@nestjs/common';
+import { Injectable, ExecutionContext, ForbiddenException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectModel } from '@nestjs/sequelize';
 import { Op } from 'sequelize';
@@ -24,6 +24,7 @@ export class MoviesLimitGuard {
   /**
    *
    * @param {IRequestJwtData} user
+   * @throws {ForbiddenException}
    */
   async checkAccess(user: IRequestJwtData) {
     if (user.role === 'premium') {
@@ -44,7 +45,7 @@ export class MoviesLimitGuard {
     });
 
     if (moviesCount >= this.config.get<number>('MOVIES_BASIC_LIMIT')) {
-      throw new BadRequestException('movies-count-per-month-exceeded');
+      throw new ForbiddenException('movies-count-per-month-exceeded');
     }
   }
 }

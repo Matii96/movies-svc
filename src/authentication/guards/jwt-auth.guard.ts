@@ -21,6 +21,7 @@ export class JwtAuthGuard {
   /**
    *
    * @param {string} bearerToken Example: Bearer jwt
+   * @throws {UnauthorizedException}
    * @returns {IRequestJwtData}
    */
   validateToken(bearerToken: string): IRequestJwtData {

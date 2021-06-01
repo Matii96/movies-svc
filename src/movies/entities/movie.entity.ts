@@ -9,13 +9,17 @@ export class Movie extends Model {
   })
   id: string;
 
-  @Column({ type: DataType.STRING, allowNull: false })
+  @Column({
+    type: DataType.STRING,
+    allowNull: false,
+    unique: { name: 'title', msg: 'colliding-title' },
+  })
   title: string;
 
   @Column({ type: DataType.DATE })
   released: Date;
 
-  @Column({ type: DataType.DATE })
+  @Column({ type: DataType.STRING })
   genre: string;
 
   @Column({ type: DataType.STRING })
