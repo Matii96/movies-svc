@@ -19,7 +19,7 @@ services:
       - published: ${APP_PORT:-3100}
         target: 3100
     networks:
-      - testnet
+      - prodnet
     depends_on:
       - auth-svc
       - postgres
@@ -28,7 +28,7 @@ services:
     container_name: auth-svc
     build: https://github.com/netguru/nodejs-recruitment-task.git
     networks:
-      - testnet
+      - prodnet
     environment:
       JWT_SECRET: secret
 
@@ -36,7 +36,7 @@ services:
     container_name: postgres
     image: postgres:12
     networks:
-      - testnet
+      - prodnet
     volumes:
       - ${PG_DATA}:/var/lib/postgresql/data
     environment:
@@ -46,4 +46,4 @@ services:
       PG_DATA: /var/lib/postgresql/data
 
 networks:
-  testnet:
+  prodnet:
