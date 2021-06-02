@@ -47,6 +47,10 @@ $ npm run test:cov
 
 `POST /movies`
 
+- **Header**
+
+  `{ Authorization: "Bearer <token>" }`
+
 - **Body**
 
   `{ title: "Star wars" }`
@@ -71,6 +75,10 @@ $ npm run test:cov
 
 `GET /movies`
 
+- **Header**
+
+  `{ Authorization: "Bearer <token>" }`
+
 - **Success Response:**
 
   - **Code:** 200 <br />
@@ -81,6 +89,10 @@ $ npm run test:cov
   - **Code:** 401 UNAUTHORIZED <br />
 
 Interactive docs available at http://localhost:3100/docs.
+
+## Continuous integration
+
+GitHub Actions with automated tests.
 
 ## Technological stack
 
