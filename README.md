@@ -66,12 +66,13 @@ $ npm run test:cov
 
   OR
 
-  - **Code:** 401 UNAUTHORIZED <br />
+  - **Code:** 403 FORBIDDEN <br />
+    **Content:** `{ error : "movies-count-per-month-exceeded" }`
 
   OR
 
-  - **Code:** 403 FORBIDDEN <br />
-    **Content:** `{ error : "movies-count-per-month-exceeded" }`
+  - **Code:** 400 BAD REQUEST <br />
+    **Content:** `{ error : "OMDb api error / not found" }`
 
 `GET /movies`
 
