@@ -88,7 +88,7 @@ $ npm run test:cov
 
   - **Code:** 401 UNAUTHORIZED <br />
 
-Interactive docs available at http://localhost:3100/docs.
+Interactive docs available at http://localhost:3100/docs in development and test modes.
 
 ## Continuous integration
 
