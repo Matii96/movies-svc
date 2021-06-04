@@ -1,6 +1,6 @@
 # Description
 
-Microservice for processing movies uning [OMDb](https://www.omdbapi.com). Netguru recruitment [task](https://github.com/netguru/nodejs-recruitment-task).
+Microservice for processing movies using [OMDb](https://www.omdbapi.com). Netguru recruitment [task](https://github.com/netguru/nodejs-recruitment-task).
 
 ## Installation
 
@@ -14,6 +14,8 @@ $ npm install
 $ APP_PORT=3100      # published port of movies microservice
 $ PG_DATA=~/pgstore  # host storage for postgresql
 ```
+
+All variables used by the service with their defaults are in .env configuration file.
 
 ## Running the app
 
